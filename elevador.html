@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba tecnica - Camilo</title>
+</head>
+
+<body>
+    <script>
+        document.write('Mirar la consola')
+
+        // valores iniciales (modificar)
+        const pisos = [5, 15, 13, 2]
+        var pisoActual = 4
+        var estadoActual = 'subiendo'
+
+        // funcion del elevador
+        function elevador(pisoActual) {
+
+            if (pisoActual < 1 || pisoActual > 15) {
+                // validacion si el piso actual no corresponde con el numero de pisos del edificio
+                return
+            }
+            console.log('Arreglo de pisos: ', pisos)
+
+            // acomodar array segun el piso actual y estadoActual
+            if (estadoActual === 'subiendo') {
+                var pisosM = pisos.sort(function (a, b) {
+                    return a - b
+                })
+                var pisosMayoresCercanos = pisosM.filter(p => p > pisoActual)
+                var pisosMenores = pisosM.filter(p => p < pisoActual).sort(function (a, b) {
+                    return b - a
+                })
+                Array.prototype.push.apply(pisosMayoresCercanos, pisosMenores)
+                var pisosM = pisosMayoresCercanos
+            } else if (estadoActual === 'bajando') {
+                var pisosM = pisos.sort(function (a, b) {
+                    return a - b
+                })
+                var pisosMayoresCercanos = pisosM.filter(p => p > pisoActual)
+                var pisosMenores = pisosM.filter(p => p < pisoActual).sort(function (a, b) {
+                    return b - a
+                })
+                Array.prototype.push.apply(pisosMenores, pisosMayoresCercanos)
+                var pisosM = pisosMenores
+            }
+
+
+            console.log('Piso inicial de ejecucion: ', pisoActual)
+            console.log('Sentido inicial: ', estadoActual)
+            console.log('Elevador se detiene en el piso: ', pisoActual)
+            var pisosRestantes = pisosM
+
+            // ciclo donde se recorre el array
+            for (var i = 0; i < pisosM.length; i++) {
+
+                if (pisoActual < 0 || pisoActual > 15) {
+                    return
+                }
+
+                // comprobar si el elevador tiene que subir
+                if (pisoActual < pisosM[i]) {
+                    while (pisoActual < pisosM[i]) {
+                        console.log('Elevador subiendo')
+                        pisoActual++
+                    }
+                    pisosRestantes = pisosRestantes.filter(p => p !== pisosM[i])
+                    console.log('Elevador se detiene en el piso: ', pisoActual, ' <- ', pisosRestantes)
+                }
+                // comprobar si el elevador tiene que bajar
+                else if (pisoActual > pisosM[i]) {
+                    while (pisoActual > pisosM[i]) {
+                        console.log('Elevador bajando')
+                        pisoActual--
+                    }
+                    pisosRestantes = pisosRestantes.filter(p => p !== pisosM[i])
+                    console.log('Elevador se detiene en el piso: ', pisoActual, ' <- ', pisosRestantes)
+                }
+            }
+        }
+
+        console.log(elevador(pisoActual))
+
+    </script>
+</body>
+
+</html>
